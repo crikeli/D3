@@ -49,11 +49,21 @@ p {
 .container {
   width: 80%;
   max-width: 1200px;
-  margin: 0 auto;
-  margin-top:10px;
+  margin-left: 135px;
+  margin-top:30px;
 }
 
 .containertwo {
+  margin-top: 30px;
+  margin-left : 135px;
+}
+
+#containerthree {
+  margin-top: 30px;
+  margin-left : 135px;
+}
+
+#bchart{
   margin-top: 30px;
   margin-left : 135px;
 }
