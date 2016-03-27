@@ -94,32 +94,66 @@ d3.select("#containerthree")
 
 
 //Last 4-04 and 5-01
-var bardata = [50, 100, 200, 300, 400, 500, 60, 88, 90, 99, 102, 188, 600];
+// var bardata = [50, 100, 200, 300, 400, 500, 288, 196, 160, 440, 224, 363, 553, 453, 124, 441];
+var bardata = [];
+
+//This loop provides different graphs everytime
+for (var i = 0; i < 20; i++) {
+    bardata.push(Math.random() * 30)
+}
 
 var height = 400,
     width = 600,
     barWidth = 50,
-    barOffset = 5
+    barOffset = 5;
+
+//Dictates the color scheme of the bars.
+var colors = d3.scale.linear()
+    .domain([0, bardata.length * .33, bardata.length * .66, bardata.length])
+    .range(['#B58929', '#C61C6F', '#268BD2', '#85922C'])
 
 //Allows for the mapping of a series of values from the domain onto a range
 var yScale = d3.scale.linear()
     .domain([0, d3.max(bardata)])
     .range([0, height])
 
+//Allows for mapping of a series of values from domain to the rangeband.
+var xScale = d3.scale.ordinal()
+    .domain(d3.range(0, bardata.length))
+    .rangeBands([0, width])
+
 d3.select("#bchart").append('svg')
     .attr('width', width)
     .attr('height', height)
-    .style("background", '#C9D7D6')
-    .selectAll('rect').data(bardata)
+// .style("background", '#C9D7D6')
+.selectAll('rect').data(bardata)
     .enter().append('rect')
-    .style('fill', '#C61C6F')
-    .attr('width', barWidth)
+    .style('fill', function(d, i) {
+        return colors(i)
+    })
+    .attr('width', xScale.rangeBand())
     .attr('height', function(d) {
         return yScale(d);
     })
     .attr('x', function(d, i) {
-        return i * (barWidth + barOffset);
+        return xScale(i);
     })
     .attr('y', function(d) {
         return height - yScale(d);
+    })
+
+//Adding events
+.on('mouseover', function(d) {
+    tempColor = this.style.fill;
+    d3.select(this)
+        .transition()
+        .style('opacity', .5)
+        .style('fill', 'yellow')
+})
+    .on('mouseout', function(d) {
+        d3.select(this)
+            .transition()
+            .style('opacity', 1)
+            .style('fill', tempColor)
+
     })
